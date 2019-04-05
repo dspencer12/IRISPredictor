@@ -1,0 +1,64 @@
+---
+title: "IRISPredictor: Predicting Iris Flower Species"
+author: "Daniel Spencer"
+date: "4/5/2019"
+output: 
+    ioslides_presentation:
+        logo: Logo.png
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction to IRISPredictor
+
+- A new application for easy and interactive predictions of iris flower species based on their measurements.
+- Useful for casual and professional botanists alike.
+<div class="red">
+- No more searching through reference books to determine the species!
+</div>
+
+## Example
+
+The below plot was created using the code for the new application server.
+
+```{r example, cache = TRUE, message = FALSE}
+library(caret)
+library(ggplot2)
+
+startTime <- proc.time()
+
+model <- train(iris[1:4], iris$Species)
+
+df <- data.frame(Sepal.Length = mean(iris$Sepal.Length),
+                 Sepal.Width = mean(iris$Sepal.Width),
+                 Petal.Length = mean(iris$Petal.Length),
+                 Petal.Width = mean(iris$Petal.Width))
+df <- cbind(df, Species = predict(model, df))
+
+ggplot(iris, aes_string(x = "Sepal.Width", y = "Petal.Length", color = "Species")) +
+    geom_point() +
+    labs(x = "Sepal Width", y = "Petal Length") +
+    scale_color_brewer(palette = "Dark2") +
+    geom_point(data = df, size = 8, shape = 4)
+
+endTime <- proc.time()
+```
+
+## Advantages
+
+- Quick and easy to use
+```{r timing, echo = TRUE}
+endTime - startTime
+```
+- Beautiful interactive web interface makes viewing results aesthetically pleasing
+- Customizable and easily extensible to other data sets in future
+
+## Conclusions
+
+- The application makes classification of iris flower species a trivial task
+- Easy-to-use web interface can be used by anybody without machine learning knowledge
+
+- Thank you for your time and I hope you will invest in IRISPredictor.
+
